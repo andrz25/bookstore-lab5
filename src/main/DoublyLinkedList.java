@@ -27,3 +27,20 @@ public interface DoublyLinkedList<T> {
     boolean contains(T data); // Check existence
     int indexOf(T data); // First index of element
 }
+
+public class DoublyLinkedList<T> implements DoublyLinkedList<T> {
+    /**
+    * Node class for Doubly Linked List.
+    */
+    class Node<T> {
+        T data;
+        Node<T> prev;
+        Node<T> next;
+        
+        Node(T data) {
+            this.data = data;
+            this.prev = null;
+            this.next = null;
+        }
+    }
+}
