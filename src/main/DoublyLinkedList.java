@@ -44,12 +44,12 @@ public interface DoublyLinkedList<T> {
     }
 
 //////
-class DoublyLinkedLists<T> implements DoublyLinkedList<T> {
+class MyDoublyLinkedList<T> implements DoublyLinkedList<T> {
 
     Node<T> head;
     Node<T> tail;
 
-    public DoublyLinkedLists<T> () {
+    public MyDoublyLinkedList() {
         this.head = null;
         this.tail = null;
     }
