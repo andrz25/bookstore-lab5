@@ -49,7 +49,7 @@ class DoublyLinkedLists<T> implements DoublyLinkedList<T> {
     Node<T> head;
     Node<T> tail;
 
-    public DoublyLinkedLists<T>() {
+    public DoublyLinkedLists<T> () {
         this.head = null;
         this.tail = null;
     }
@@ -133,7 +133,22 @@ class DoublyLinkedLists<T> implements DoublyLinkedList<T> {
     // Remove from a given index
     @Override
     public T removeAt(int index) {
-        Node<T> node = new
+        Node<T> cur = head;
+        Node<T> prev = head.prev;
+        Node<T> next = head.next;
+        int i = 0;
+        while(cur != null){
+            if(i == index){
+                prev.next = cur.next;
+                next.prev = cur.prev;
+                return cur.data;
+            }
+            i++;
+            prev = cur;
+            cur = cur.next;
+            next = cur.next;
+        }
+        return null;
     }
 
     /////////////////Access/////////////////
@@ -153,7 +168,16 @@ class DoublyLinkedLists<T> implements DoublyLinkedList<T> {
     // Get element at index
     @Override
     public T getAt(int index) {
-
+        Node<T> cur = head;
+        int i = 0;
+        while(cur != null){
+            if(i == index){
+                return cur.data;
+            }
+            i++;
+            cur = cur.next;
+        }
+        return null;
     }
     
     /////////////////Utility/////////////////
@@ -161,19 +185,31 @@ class DoublyLinkedLists<T> implements DoublyLinkedList<T> {
     // Number of elements
     @Override
     public int size() {
-        while (head)
+        Node cur = head;
+        int count = 0;
+        while (cur != null){
+            count++;
+            cur = cur.next;
+        }
+        return count;
     }
 
     // Check if empty
     @Override
     public boolean isEmpty() {
-        return true;
+        if(head == null){
+            return true;
+        }
+        return false;
     }
 
     // Remove all elements
     @Override
     public void clear() {
-        
+        while(tail != null){
+            tail = tail.prev;
+        }
+        head = null;
     }
 
     /////////////////Search/////////////////
@@ -181,12 +217,28 @@ class DoublyLinkedLists<T> implements DoublyLinkedList<T> {
     // Check existence
     @Override
     public boolean contains(T data) {
-        return true;
+        Node<T> cur = head;
+        while(cur != null){
+            if(cur.data == data){
+                return true;
+            }
+            cur = cur.next;
+        }
+        return false;
     }
 
     // First index of element
     @Override
     public int indexOf(T data) {
-        return 0;
+        Node<T> cur = head;
+        int index = 0;
+        while(cur != null){
+            if(cur.data == data){
+                return index;
+            }
+            index++;
+            cur = cur.next;
+        }
+        return -1;
     }
 }
