@@ -1,127 +1,25 @@
-/**
- * Author: Jayna Ong and Nina Zhang
- * Date: November 29, 2025
- * Version: 1.0
-* A generic Doubly Linked List interface for Lab 5.
-* Students must implement all methods.
-*/
-public interface DoublyLinkedList<T> {
-    // Basic operations
+package com.github.andrz25.model;
 
-    /**
-     * Inserts a node at the head
-     * @param data the data contained inside the node
-     */
-    void addFirst(T data);
+import com.github.andrz25.api.DoublyLinkedList;
 
-    /**
-     * Inserts a node at the tail
-     * @param data the data contained inside the node
-     */
-    void addLast(T data);
-
-    /**
-     * Inserts a node at a given index
-     * @param index the index that will obtain a new node
-     * @param data the data contained inside the node
-     */
-    void insertAt(int index, T data);
-    
-    // Deletion
-
-    /**
-     * Removes the head node
-     * @return the removed head node
-     */
-    T removeFirst(); 
-
-    /**
-     * Removes the tail node
-     * @return the removed tail node
-     */
-    T removeLast();
-
-    /**
-     * Removes a node at a given index
-     * @param index the index that a node will be deleted
-     * @return the deleted node
-     */
-    T removeAt(int index);
-
-    // Access
-
-    /**
-     * Gets head element
-     * @return the head element
-     */
-    T getFirst();
-
-    /**
-     * Gets tail element
-     * @return the tail element
-     */
-    T getLast();
-
-    /**
-     * Gets element at given index
-     * @param index the index that a node will be retrieved
-     * @return the node that was retrieved
-     */
-    T getAt(int index);
-    
-    // Utility
-
-    /**
-     * Finds number of elements in doubly linked list
-     * @return number of elements in doubly linked list
-     */
-    int size();
-
-    /**
-     * Checks if doubly linked list is empty
-     * @return true if doubly linked list is empty, false if not
-     */
-    boolean isEmpty();
-
-    /**
-     * Removes all elements in doubly linked list
-     */
-    void clear();
-
-    // Search
-
-    /**
-     * Checks if a node exists in doubly linked list
-     * @param data the data contained inside the node
-     * @return true if node is in doubly linked list, false if not
-     */
-    boolean contains(T data);
-
-    /**
-     * Gets first index of given element
-     * @param data the data contained inside the node
-     * @return the index of the element searched, if not found, -1 is returned
-     */
-    int indexOf(T data);
-}
-
-/**
-* Node class for Doubly Linked List.
-*/
+/** Node class for Doubly Linked List. */
 class Node<T> {
     T data;
     Node<T> prev;
     Node<T> next;
 
-    Node (T data) {
+    Node(T data) {
         this.data = data;
         this.prev = null;
         this.next = null;
     }
 }
 
-//////
-class MyDoublyLinkedList<T> implements DoublyLinkedList<T> {
+/**
+ * Author: Jayna Ong and Nina Zhang Date: November 29, 2025 Version: 1.0 A generic Doubly Linked
+ * List
+ */
+public class MyDoublyLinkedList<T> implements DoublyLinkedList<T> {
 
     Node<T> head;
     Node<T> tail;
@@ -130,43 +28,41 @@ class MyDoublyLinkedList<T> implements DoublyLinkedList<T> {
         this.head = null;
         this.tail = null;
     }
-    
-    /////////////////Basic Operations/////////////////
-    
+
+    ///////////////// Basic Operations/////////////////
+
     // Insert at the head
     @Override
     public void addFirst(T data) {
-        Node<T> node = new Node<> (data);
+        Node<T> node = new Node<>(data);
         node.prev = null;
 
         if (head != null) {
             node.next = head;
             head.prev = node;
-        }
-        else {
+        } else {
             node.next = null;
             tail = node;
         }
         head = node;
     }
-    
+
     // Insert at the tail
     @Override
     public void addLast(T data) {
-        Node<T> node = new Node<> (data);
+        Node<T> node = new Node<>(data);
         node.next = null;
 
         if (tail != null) {
             node.prev = tail;
             tail.next = node;
-        }
-        else {
+        } else {
             node.prev = null;
             head = node;
         }
         tail = node;
     }
-       
+
     // Insert at a given index
     @Override
     public void insertAt(int index, T data) {
@@ -184,8 +80,7 @@ class MyDoublyLinkedList<T> implements DoublyLinkedList<T> {
             return;
         }
 
-
-        Node<T> node = new Node<> (data);
+        Node<T> node = new Node<>(data);
         Node<T> cur = head.next;
         Node<T> prev = head;
 
@@ -201,7 +96,8 @@ class MyDoublyLinkedList<T> implements DoublyLinkedList<T> {
             cur = cur.next;
         }
     }
-    /////////////////Deletion/////////////////
+
+    ///////////////// Deletion/////////////////
 
     // Remove from head
     @Override
@@ -216,8 +112,7 @@ class MyDoublyLinkedList<T> implements DoublyLinkedList<T> {
 
         if (head != null) {
             head.prev = null;
-        }
-        else {
+        } else {
             tail = null;
         }
         return data;
@@ -236,8 +131,7 @@ class MyDoublyLinkedList<T> implements DoublyLinkedList<T> {
 
         if (tail != null) {
             tail.next = null;
-        }
-        else {
+        } else {
             head = null;
         }
         return data;
@@ -253,22 +147,20 @@ class MyDoublyLinkedList<T> implements DoublyLinkedList<T> {
         Node<T> cur = head;
         int i = 0;
 
-        while (cur != null){
-            if (i == index){
+        while (cur != null) {
+            if (i == index) {
                 Node<T> prev = cur.prev;
                 Node<T> next = cur.next;
 
                 if (prev != null) {
                     prev.next = next;
-                }
-                else {
+                } else {
                     head = next;
                 }
 
                 if (next != null) {
                     next.prev = prev;
-                }
-                else {
+                } else {
                     tail = prev;
                 }
 
@@ -280,8 +172,8 @@ class MyDoublyLinkedList<T> implements DoublyLinkedList<T> {
         return null;
     }
 
-    /////////////////Access/////////////////
-    
+    ///////////////// Access/////////////////
+
     // Get head element
     @Override
     public T getFirst() {
@@ -305,8 +197,8 @@ class MyDoublyLinkedList<T> implements DoublyLinkedList<T> {
     public T getAt(int index) {
         Node<T> cur = head;
         int i = 0;
-        while(cur != null){
-            if(i == index){
+        while (cur != null) {
+            if (i == index) {
                 return cur.data;
             }
             i++;
@@ -314,15 +206,15 @@ class MyDoublyLinkedList<T> implements DoublyLinkedList<T> {
         }
         return null;
     }
-    
-    /////////////////Utility/////////////////
+
+    ///////////////// Utility/////////////////
 
     // Number of elements
     @Override
     public int size() {
         Node cur = head;
         int count = 0;
-        while (cur != null){
+        while (cur != null) {
             count++;
             cur = cur.next;
         }
@@ -332,7 +224,7 @@ class MyDoublyLinkedList<T> implements DoublyLinkedList<T> {
     // Check if empty
     @Override
     public boolean isEmpty() {
-        if (head == null){
+        if (head == null) {
             return true;
         }
         return false;
@@ -345,14 +237,14 @@ class MyDoublyLinkedList<T> implements DoublyLinkedList<T> {
         tail = null;
     }
 
-    /////////////////Search/////////////////
-    
+    ///////////////// Search/////////////////
+
     // Check existence
     @Override
     public boolean contains(T data) {
         Node<T> cur = head;
-        while(cur != null){
-            if(cur.data.equals(data)){
+        while (cur != null) {
+            if (cur.data.equals(data)) {
                 return true;
             }
             cur = cur.next;
@@ -365,8 +257,8 @@ class MyDoublyLinkedList<T> implements DoublyLinkedList<T> {
     public int indexOf(T data) {
         Node<T> cur = head;
         int index = 0;
-        while(cur != null){
-            if(cur.data.equals(data)){
+        while (cur != null) {
+            if (cur.data.equals(data)) {
                 return index;
             }
             index++;
