@@ -68,6 +68,7 @@ class MyDoublyLinkedList<T> implements DoublyLinkedList<T> {
         }
         else {
             node.next = null;
+            tail = node;
         }
         head = node;
     }
@@ -84,6 +85,7 @@ class MyDoublyLinkedList<T> implements DoublyLinkedList<T> {
         }
         else {
             node.prev = null;
+            head = node;
         }
         tail = node;
     }
@@ -91,16 +93,32 @@ class MyDoublyLinkedList<T> implements DoublyLinkedList<T> {
     // Insert at a given index
     @Override
     public void insertAt(int index, T data) {
+        if (index < 0 || index > size()) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        if (index == 0) {
+            addFirst(data);
+            return;
+        }
+
+        if (index == size()) {
+            addLast(data);
+            return;
+        }
+
+
         Node<T> node = new Node<> (data);
-        Node<T> cur = head;
-        Node<T> prev = head.prev;
+        Node<T> cur = head.next;
+        Node<T> prev = head;
 
         for (int i = 1; i < size(); i++) {
             if (i == index) {
                 node.prev = prev;
+                node.next = cur;
                 prev.next = node;
                 cur.prev = node;
-                node.next = cur;
+                break;
             }
             prev = cur;
             cur = cur.next;
@@ -111,42 +129,76 @@ class MyDoublyLinkedList<T> implements DoublyLinkedList<T> {
     // Remove from head
     @Override
     public T removeFirst() {
-        Node<T> node = head.next;
+        if (head == null) {
+            return null;
+        }
 
+        Node<T> node = head.next;
         T data = head.data;
         head = node;
-        head.prev = null;
+
+        if (head != null) {
+            head.prev = null;
+        }
+        else {
+            tail = null;
+        }
         return data;
     }
 
     // Remove from tail
     @Override
     public T removeLast() {
+        if (tail == null) {
+            return null;
+        }
         Node<T> node = tail.prev;
 
         T data = tail.data;
         tail = node;
-        tail.next = null;
+
+        if (tail != null) {
+            tail.next = null;
+        }
+        else {
+            head = null;
+        }
         return data;
     }
 
     // Remove from a given index
     @Override
     public T removeAt(int index) {
+        if (index < 0 || index >= size()) {
+            throw new IndexOutOfBoundsException();
+        }
+
         Node<T> cur = head;
-        Node<T> prev = head.prev;
-        Node<T> next = head.next;
         int i = 0;
-        while(cur != null){
-            if(i == index){
-                prev.next = cur.next;
-                next.prev = cur.prev;
+
+        while (cur != null){
+            if (i == index){
+                Node<T> prev = cur.prev;
+                Node<T> next = cur.next;
+
+                if (prev != null) {
+                    prev.next = next;
+                }
+                else {
+                    head = next;
+                }
+
+                if (next != null) {
+                    next.prev = prev;
+                }
+                else {
+                    tail = prev;
+                }
+
                 return cur.data;
             }
             i++;
-            prev = cur;
             cur = cur.next;
-            next = cur.next;
         }
         return null;
     }
@@ -156,12 +208,18 @@ class MyDoublyLinkedList<T> implements DoublyLinkedList<T> {
     // Get head element
     @Override
     public T getFirst() {
+        if (head == null || tail == null) {
+            return null;
+        }
         return head.data;
     }
 
     // Get tail element
     @Override
     public T getLast() {
+        if (head == null || tail == null) {
+            return null;
+        }
         return tail.data;
     }
 
@@ -197,7 +255,7 @@ class MyDoublyLinkedList<T> implements DoublyLinkedList<T> {
     // Check if empty
     @Override
     public boolean isEmpty() {
-        if(head == null){
+        if (head == null){
             return true;
         }
         return false;
@@ -206,10 +264,8 @@ class MyDoublyLinkedList<T> implements DoublyLinkedList<T> {
     // Remove all elements
     @Override
     public void clear() {
-        while(tail != null){
-            tail = tail.prev;
-        }
         head = null;
+        tail = null;
     }
 
     /////////////////Search/////////////////
@@ -219,7 +275,7 @@ class MyDoublyLinkedList<T> implements DoublyLinkedList<T> {
     public boolean contains(T data) {
         Node<T> cur = head;
         while(cur != null){
-            if(cur.data == data){
+            if(cur.data.equals(data)){
                 return true;
             }
             cur = cur.next;
@@ -233,7 +289,7 @@ class MyDoublyLinkedList<T> implements DoublyLinkedList<T> {
         Node<T> cur = head;
         int index = 0;
         while(cur != null){
-            if(cur.data == data){
+            if(cur.data.equals(data)){
                 return index;
             }
             index++;
