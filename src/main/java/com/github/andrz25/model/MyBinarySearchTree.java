@@ -21,7 +21,7 @@ public class MyBinarySearchTree<T extends Comparable<T>> implements BinarySearch
     private TreeNode<T> root;
     private int size;
 
-    public void MyBinarySearchTree() {
+    public MyBinarySearchTree() {
         root = null;
         size = 0;
     }
