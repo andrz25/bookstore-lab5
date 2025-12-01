@@ -2,6 +2,9 @@ package com.github.andrz25.model;
 
 import com.github.andrz25.api.BinarySearchTree;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 class TreeNode<T> {
     T data;
     TreeNode<T> left;
@@ -71,22 +74,61 @@ public class MyBinarySearchTree<T extends Comparable<T>> implements BinarySearch
 
     @Override
     public void inOrderTraversal() {
+        recursiveInOrderTraversal(root);
+    }
 
+    private void recursiveInOrderTraversal(TreeNode<T> node) {
+        if (node != null) {
+            recursiveInOrderTraversal(node.left);    // Visit left subtree
+            System.out.print(node.data + " "); // Process root
+            recursiveInOrderTraversal(node.right);   // Visit right subtree
+        }
     }
 
     @Override
     public void preOrderTraversal() {
+        recursivePreOrderTraversal(root);
+    }
 
+    private void recursivePreOrderTraversal(TreeNode<T> node) {
+        if (node != null) {
+            System.out.print(node.data + " "); // Process root first
+            recursivePreOrderTraversal(node.left); // Visit left subtree
+            recursivePreOrderTraversal(node.right); // Visit right subtree
+        }
     }
 
     @Override
     public void postOrderTraversal() {
+        recursivePostOrderTraversal(root);
+    }
 
+    private void recursivePostOrderTraversal(TreeNode<T> node) {
+        if (node != null) {
+            recursivePostOrderTraversal(node.left);     // Visit left subtree
+            recursivePostOrderTraversal(node.right);    // Visit right subtree
+            System.out.print(node.data + " "); // Process root last
+        }
     }
 
     @Override
     public void levelOrderTraversal() {
+        recursiveLevelOrderTraversal(root);
+    }
 
+    private void recursiveLevelOrderTraversal(TreeNode<T> root) {
+        if (root == null) return;
+
+        Queue<TreeNode<T>> queue = new LinkedList<>();
+        queue.offer(root);
+
+        while (!queue.isEmpty()) {
+            TreeNode<T> current = queue.poll();
+            System.out.print(current.data + " ");
+
+            if (current.left != null) queue.offer(current.left);
+            if (current.right != null) queue.offer(current.right);
+        }
     }
 
     @Override
