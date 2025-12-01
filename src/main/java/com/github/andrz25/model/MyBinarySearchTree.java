@@ -81,9 +81,56 @@ public class MyBinarySearchTree<T extends Comparable<T>> implements BinarySearch
         return false;
     }
 
+    private TreeNode<T> getSuccessor(TreeNode<T> curr) {
+        curr = curr.right;
+
+        while (curr.left != null) {
+            curr = curr.left;
+        }
+
+        return curr;
+    }
+
     @Override
     public void delete(T data) {
+        TreeNode<T> parent = null;
+        TreeNode<T> current = root;
 
+        while (current != null) {
+            int comparison = data.compareTo(current.data);
+
+            if (comparison < 0) {
+                parent = current;
+                current = current.left;
+            } else if (comparison > 0) {
+                parent = current;
+                current = current.right;
+            } else {
+                if (current.left != null && current.right != null) {
+                    TreeNode<T> successor = getSuccessor(current);
+
+                    T successorData = successor.data;
+
+                    delete(successorData);
+
+                    current.data = successorData;
+
+                    return;
+                }
+
+                TreeNode<T> replacement = (current.left != null) ? current.left : current.right;
+
+                if (parent == null) {
+                    root = replacement;
+                } else if (parent.left == current) {
+                    parent.left = replacement;
+                } else {
+                    parent.right = replacement;
+                }
+
+                return;
+            }
+        }
     }
 
     @Override
