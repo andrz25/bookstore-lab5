@@ -64,6 +64,20 @@ public class MyBinarySearchTree<T extends Comparable<T>> implements BinarySearch
 
     @Override
     public boolean contains(T data) {
+        TreeNode<T> current = root;
+
+        while (current != null) {
+            int comparison = data.compareTo(current.data);
+
+            if (comparison == 0) {
+                return true;
+            } else if (comparison < 0) {
+                current = current.left;
+            } else {
+                current = current.right;
+            }
+        }
+
         return false;
     }
 
@@ -79,9 +93,9 @@ public class MyBinarySearchTree<T extends Comparable<T>> implements BinarySearch
 
     private void recursiveInOrderTraversal(TreeNode<T> node) {
         if (node != null) {
-            recursiveInOrderTraversal(node.left);    // Visit left subtree
+            recursiveInOrderTraversal(node.left); // Visit left subtree
             System.out.print(node.data + " "); // Process root
-            recursiveInOrderTraversal(node.right);   // Visit right subtree
+            recursiveInOrderTraversal(node.right); // Visit right subtree
         }
     }
 
@@ -105,8 +119,8 @@ public class MyBinarySearchTree<T extends Comparable<T>> implements BinarySearch
 
     private void recursivePostOrderTraversal(TreeNode<T> node) {
         if (node != null) {
-            recursivePostOrderTraversal(node.left);     // Visit left subtree
-            recursivePostOrderTraversal(node.right);    // Visit right subtree
+            recursivePostOrderTraversal(node.left); // Visit left subtree
+            recursivePostOrderTraversal(node.right); // Visit right subtree
             System.out.print(node.data + " "); // Process root last
         }
     }
