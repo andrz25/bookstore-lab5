@@ -5,6 +5,28 @@ import com.github.andrz25.api.BinarySearchTree;
 import java.util.LinkedList;
 import java.util.Queue;
 
+/**
+ * An implementation of a Binary Search Tree (BST).
+ * * <h2>Design Choices & Trade-offs</h2>
+ * <ul>
+ * <li>
+ * <b>Iterative Core Operations:</b> The <code>insert</code>, <code>delete</code>, and <code>contains</code>
+ * methods are implemented iteratively. This prevents {@code StackOverflowError} when building
+ * deep trees, which is a common failure point in recursive BST implementations.
+ * </li>
+ * <li>
+ * <b>Recursive Traversals:</b> Traversals and height calculations use recursion for code clarity.
+ * <i>Note:</i> On highly skewed trees (depth > 10,000), these methods may throw a StackOverflowError.
+ * </li>
+ * <li>
+ * <b>Unbalanced Structure:</b> This implementation does not self-balance. While this keeps the code
+ * simple and memory-efficient (no need to store color or height in nodes), it means
+ * worst-case performance is O(n) for sorted input.
+ * </li>
+ * </ul>
+ *
+ * @param <T> the type of elements maintained by this tree, must extend Comparable
+ */
 class TreeNode<T> {
     T data;
     TreeNode<T> left;
@@ -17,6 +39,33 @@ class TreeNode<T> {
     }
 }
 
+/**
+ * An implementation of a Binary Search Tree (BST).
+ *
+ * <h2>Complexity Summary</h2>
+ * <table border="1">
+ * <tr>
+ * <th>Operation</th>
+ * <th>Average Case (Balanced)</th>
+ * <th>Worst Case (Skewed)</th>
+ * </tr>
+ * <tr>
+ * <td>Search/Insert/Delete</td>
+ * <td>O(log n)</td>
+ * <td>O(n)</td>
+ * </tr>
+ * <tr>
+ * <td>Traversals</td>
+ * <td>O(n)</td>
+ * <td>O(n)</td>
+ * </tr>
+ * </table>
+ * <br>
+ * <b>Note:</b> Because this is not a self-balancing tree (like AVL or Red-Black trees),
+ * the worst-case scenario occurs when data is inserted in sorted order, creating a "linked list" structure.
+ *
+ * @param <T> the type of elements maintained by this tree, must extend Comparable
+ */
 public class MyBinarySearchTree<T extends Comparable<T>> implements BinarySearchTree<T> {
     private TreeNode<T> root;
     private int size;
@@ -26,6 +75,18 @@ public class MyBinarySearchTree<T extends Comparable<T>> implements BinarySearch
         size = 0;
     }
 
+    /**
+     * Inserts a new element into the binary search tree.
+     *
+     * <h3>Complexity Analysis</h3>
+     * <ul>
+     * <li><b>Time:</b> O(h) where h is the height of the tree.
+     * Average: O(log n), Worst: O(n).</li>
+     * <li><b>Space:</b> O(1) (Iterative implementation).</li>
+     * </ul>
+     *
+     * @param data the element to insert
+     */
     @Override
     public void insert(T data) {
         if (root == null) {
@@ -62,6 +123,18 @@ public class MyBinarySearchTree<T extends Comparable<T>> implements BinarySearch
         size++;
     }
 
+    /**
+     * Checks if the tree contains the specified element.
+     *
+     * <h3>Complexity Analysis</h3>
+     * <ul>
+     * <li><b>Time:</b> O(h). Average: O(log n), Worst: O(n).</li>
+     * <li><b>Space:</b> O(1) (Iterative implementation).</li>
+     * </ul>
+     *
+     * @param data the element to search for
+     * @return true if found, false otherwise
+     */
     @Override
     public boolean contains(T data) {
         TreeNode<T> current = root;
@@ -81,6 +154,18 @@ public class MyBinarySearchTree<T extends Comparable<T>> implements BinarySearch
         return false;
     }
 
+    /**
+     * Removes the specified element from the tree.
+     *
+     * <h3>Complexity Analysis</h3>
+     * <ul>
+     * <li><b>Time:</b> O(h) to find the node and potentially the successor.
+     * Average: O(log n), Worst: O(n).</li>
+     * <li><b>Space:</b> O(1) (Iterative implementation).</li>
+     * </ul>
+     *
+     * @param data the element to delete
+     */
     @Override
     public void delete(T data) {
         TreeNode<T> parent = null;
@@ -103,16 +188,13 @@ public class MyBinarySearchTree<T extends Comparable<T>> implements BinarySearch
                     TreeNode<T> successorParent = current;
                     TreeNode<T> successor = current.right;
 
-                    // Find Successor (left-most node in right subtree)
                     while (successor.left != null) {
                         successorParent = successor;
                         successor = successor.left;
                     }
 
-                    // Swap data
                     current.data = successor.data;
 
-                    // Remove Successor
                     if (successorParent == current) {
                         successorParent.right = successor.right;
                     } else {
@@ -135,9 +217,17 @@ public class MyBinarySearchTree<T extends Comparable<T>> implements BinarySearch
                 return;
             }
         }
-        // If we exit the loop, the data was not found, so size is unchanged.
     }
 
+    /**
+     * Performs an in-order traversal (Left, Root, Right).
+     *
+     * <h3>Complexity Analysis</h3>
+     * <ul>
+     * <li><b>Time:</b> O(n) (Visits every node).</li>
+     * <li><b>Space:</b> O(h) for recursion stack. Worst case O(n).</li>
+     * </ul>
+     */
     @Override
     public void inOrderTraversal() {
         recursiveInOrderTraversal(root);
@@ -145,12 +235,21 @@ public class MyBinarySearchTree<T extends Comparable<T>> implements BinarySearch
 
     private void recursiveInOrderTraversal(TreeNode<T> node) {
         if (node != null) {
-            recursiveInOrderTraversal(node.left); // Visit left subtree
-            System.out.print(node.data + " "); // Process root
-            recursiveInOrderTraversal(node.right); // Visit right subtree
+            recursiveInOrderTraversal(node.left);
+            System.out.print(node.data + " ");
+            recursiveInOrderTraversal(node.right);
         }
     }
 
+    /**
+     * Performs a pre-order traversal (Root, Left, Right).
+     *
+     * <h3>Complexity Analysis</h3>
+     * <ul>
+     * <li><b>Time:</b> O(n) (Visits every node).</li>
+     * <li><b>Space:</b> O(h) for recursion stack. Worst case O(n).</li>
+     * </ul>
+     */
     @Override
     public void preOrderTraversal() {
         recursivePreOrderTraversal(root);
@@ -158,12 +257,21 @@ public class MyBinarySearchTree<T extends Comparable<T>> implements BinarySearch
 
     private void recursivePreOrderTraversal(TreeNode<T> node) {
         if (node != null) {
-            System.out.print(node.data + " "); // Process root first
-            recursivePreOrderTraversal(node.left); // Visit left subtree
-            recursivePreOrderTraversal(node.right); // Visit right subtree
+            System.out.print(node.data + " ");
+            recursivePreOrderTraversal(node.left);
+            recursivePreOrderTraversal(node.right);
         }
     }
 
+    /**
+     * Performs a post-order traversal (Left, Right, Root).
+     *
+     * <h3>Complexity Analysis</h3>
+     * <ul>
+     * <li><b>Time:</b> O(n) (Visits every node).</li>
+     * <li><b>Space:</b> O(h) for recursion stack. Worst case O(n).</li>
+     * </ul>
+     */
     @Override
     public void postOrderTraversal() {
         recursivePostOrderTraversal(root);
@@ -171,12 +279,22 @@ public class MyBinarySearchTree<T extends Comparable<T>> implements BinarySearch
 
     private void recursivePostOrderTraversal(TreeNode<T> node) {
         if (node != null) {
-            recursivePostOrderTraversal(node.left); // Visit left subtree
-            recursivePostOrderTraversal(node.right); // Visit right subtree
-            System.out.print(node.data + " "); // Process root last
+            recursivePostOrderTraversal(node.left);
+            recursivePostOrderTraversal(node.right);
+            System.out.print(node.data + " ");
         }
     }
 
+    /**
+     * Performs a level-order traversal (Breadth-First Search).
+     *
+     * <h3>Complexity Analysis</h3>
+     * <ul>
+     * <li><b>Time:</b> O(n) (Visits every node).</li>
+     * <li><b>Space:</b> O(w) where w is the maximum width of the tree.
+     * In a perfect binary tree, w = n/2, so O(n).</li>
+     * </ul>
+     */
     @Override
     public void levelOrderTraversal() {
         recursiveLevelOrderTraversal(root);
@@ -197,6 +315,17 @@ public class MyBinarySearchTree<T extends Comparable<T>> implements BinarySearch
         }
     }
 
+    /**
+     * Calculates the height of the tree.
+     *
+     * <h3>Complexity Analysis</h3>
+     * <ul>
+     * <li><b>Time:</b> O(n) (Must visit every node to find max depth).</li>
+     * <li><b>Space:</b> O(h) for recursion stack. Worst case O(n).</li>
+     * </ul>
+     *
+     * @return the height of the tree
+     */
     @Override
     public int height() {
         return recursiveHeight(root);
@@ -211,11 +340,33 @@ public class MyBinarySearchTree<T extends Comparable<T>> implements BinarySearch
         return 1 + Math.max(leftHeight, rightHeight);
     }
 
+    /**
+     * Returns the number of elements in the tree.
+     *
+     * <h3>Complexity Analysis</h3>
+     * <ul>
+     * <li><b>Time:</b> O(1) (Returns cached variable).</li>
+     * <li><b>Space:</b> O(1).</li>
+     * </ul>
+     *
+     * @return the size of the tree
+     */
     @Override
     public int size() {
         return size;
     }
 
+    /**
+     * Checks if the tree is empty.
+     *
+     * <h3>Complexity Analysis</h3>
+     * <ul>
+     * <li><b>Time:</b> O(1).</li>
+     * <li><b>Space:</b> O(1).</li>
+     * </ul>
+     *
+     * @return true if empty, false otherwise
+     */
     @Override
     public boolean isEmpty() {
         return size == 0;
