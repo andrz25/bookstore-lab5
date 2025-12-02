@@ -1,8 +1,11 @@
 package com.github.andrz25.api;
 
 /**
- * Author: Jayna Ong and Nina Zhang Date: November 29, 2025 Version: 1.0 A generic Doubly Linked
- * List interface for Lab 5. Students must implement all methods.
+ * Author: Jayna Ong and Nina Zhang 
+ * Date: November 29, 2025 
+ * Version: 1.0 
+ * A generic Doubly Linked List interface for Lab 5. 
+ * Students must implement all methods.
  */
 public interface DoublyLinkedList<T> {
     // Basic operations

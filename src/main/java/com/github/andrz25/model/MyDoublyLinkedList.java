@@ -16,8 +16,10 @@ class Node<T> {
 }
 
 /**
- * Author: Jayna Ong and Nina Zhang Date: November 29, 2025 Version: 1.0 A generic Doubly Linked
- * List
+ * Author: Jayna Ong and Nina Zhang Date: 
+ * November 29, 2025 
+ * Version: 1.0 
+ * A generic Doubly Linked List
  */
 public class MyDoublyLinkedList<T> implements DoublyLinkedList<T> {
 
