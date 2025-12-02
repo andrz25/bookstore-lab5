@@ -81,16 +81,6 @@ public class MyBinarySearchTree<T extends Comparable<T>> implements BinarySearch
         return false;
     }
 
-    private TreeNode<T> getSuccessor(TreeNode<T> curr) {
-        curr = curr.right;
-
-        while (curr.left != null) {
-            curr = curr.left;
-        }
-
-        return curr;
-    }
-
     @Override
     public void delete(T data) {
         TreeNode<T> parent = null;
@@ -106,14 +96,28 @@ public class MyBinarySearchTree<T extends Comparable<T>> implements BinarySearch
                 parent = current;
                 current = current.right;
             } else {
+                size--;
+
+                // Case 1: Two Children
                 if (current.left != null && current.right != null) {
-                    TreeNode<T> successor = getSuccessor(current);
+                    TreeNode<T> successorParent = current;
+                    TreeNode<T> successor = current.right;
 
-                    T successorData = successor.data;
+                    // Find Successor (left-most node in right subtree)
+                    while (successor.left != null) {
+                        successorParent = successor;
+                        successor = successor.left;
+                    }
 
-                    delete(successorData);
+                    // Swap data
+                    current.data = successor.data;
 
-                    current.data = successorData;
+                    // Remove Successor
+                    if (successorParent == current) {
+                        successorParent.right = successor.right;
+                    } else {
+                        successorParent.left = successor.right;
+                    }
 
                     return;
                 }
@@ -131,6 +135,7 @@ public class MyBinarySearchTree<T extends Comparable<T>> implements BinarySearch
                 return;
             }
         }
+        // If we exit the loop, the data was not found, so size is unchanged.
     }
 
     @Override
@@ -194,16 +199,25 @@ public class MyBinarySearchTree<T extends Comparable<T>> implements BinarySearch
 
     @Override
     public int height() {
-        return 0;
+        return recursiveHeight(root);
+    }
+
+    private int recursiveHeight(TreeNode<T> node) {
+        if (node == null) return -1;
+
+        int leftHeight = recursiveHeight(node.left);
+        int rightHeight = recursiveHeight(node.right);
+
+        return 1 + Math.max(leftHeight, rightHeight);
     }
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return size == 0;
     }
 }
